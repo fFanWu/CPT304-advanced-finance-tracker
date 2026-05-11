@@ -69,6 +69,9 @@ const setTheme = (theme) => {
   dom.themeToggleBtn.textContent =
     theme === "light" ? "Dark Mode" : "Light Mode";
   saveTheme();
+  if (typeof renderChart === "function") {
+    renderChart();
+  }
 };
 
 const loadTheme = () => {
@@ -362,6 +365,12 @@ const renderChart = () => {
 
   ctx.clearRect(0, 0, width, height);
 
+  const styles = getComputedStyle(document.body);
+  const textColor = styles.getPropertyValue("--text").trim() || "#f8fafc";
+  const baseLineColor =
+    styles.getPropertyValue("--chart-base-line").trim() ||
+    "rgba(255,255,255,0.08)";
+
   const amounts = state.transactions.map((tx) => tx.amount);
   const income = amounts.filter((a) => a > 0).reduce((s, a) => s + a, 0);
   const expenses = Math.abs(
@@ -376,7 +385,7 @@ const renderChart = () => {
   const incomeHeight = (income / maxValue) * (height - 80);
   const expenseHeight = (expenses / maxValue) * (height - 80);
 
-  ctx.strokeStyle = "rgba(255,255,255,0.08)";
+  ctx.strokeStyle = baseLineColor;
   ctx.beginPath();
   ctx.moveTo(40, baseY);
   ctx.lineTo(width - 40, baseY);
@@ -393,7 +402,7 @@ const renderChart = () => {
     expenseHeight,
   );
 
-  ctx.fillStyle = "#f8f4e9";
+  ctx.fillStyle = textColor;
   ctx.font = "14px sans-serif";
   ctx.fillText("Income", 170, baseY + 20);
   ctx.fillText("Expense", 160 + barWidth + gap, baseY + 20);
