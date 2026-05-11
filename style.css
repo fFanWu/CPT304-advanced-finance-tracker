@@ -1,4 +1,6 @@
 :root {
+  color-scheme: dark;
+
   --bg: #0f172a;
   --bg-accent: #111827;
   --card: rgba(255, 255, 255, 0.08);
@@ -13,6 +15,27 @@
   --radius: 18px;
   --font:
     "Space Grotesk", "Sora", "Poppins", system-ui, -apple-system, sans-serif;
+
+  --bg-radial-1: #1e293b;
+  --bg-radial-2: #0ea5e9;
+  --bg-radial-3: #7c3aed;
+  --bg-gradient-from: rgba(14, 165, 233, 0.18);
+  --bg-gradient-to: rgba(124, 58, 237, 0.14);
+
+  --transaction-bg: rgba(15, 23, 42, 0.4);
+  --transaction-bg-hover: rgba(15, 23, 42, 0.55);
+  --transaction-border: rgba(255, 255, 255, 0.05);
+  --chart-bg: rgba(15, 23, 42, 0.35);
+  --chart-border: rgba(255, 255, 255, 0.08);
+  --chart-base-line: rgba(255, 255, 255, 0.08);
+  --modal-backdrop: rgba(15, 23, 42, 0.65);
+  --toast-bg: rgba(15, 23, 42, 0.9);
+  --toast-text: #f8fafc;
+  --skeleton-bg: rgba(15, 23, 42, 0.95);
+  --empty-border: rgba(255, 255, 255, 0.2);
+  --placeholder: rgba(248, 250, 252, 0.45);
+  --badge-bg: rgba(56, 189, 248, 0.15);
+  --badge-text: #bae6fd;
 }
 
 * {
@@ -26,9 +49,10 @@ body {
   font-family: var(--font);
   color: var(--text);
   background:
-    radial-gradient(circle at 20% 20%, #1e293b, transparent 55%),
-    radial-gradient(circle at 80% 10%, #0ea5e9, transparent 35%),
-    radial-gradient(circle at 80% 85%, #7c3aed, transparent 40%), var(--bg);
+    radial-gradient(circle at 20% 20%, var(--bg-radial-1), transparent 55%),
+    radial-gradient(circle at 80% 10%, var(--bg-radial-2), transparent 35%),
+    radial-gradient(circle at 80% 85%, var(--bg-radial-3), transparent 40%),
+    var(--bg);
   padding: 32px;
 }
 
@@ -37,8 +61,8 @@ body {
   inset: 0;
   background: linear-gradient(
     135deg,
-    rgba(14, 165, 233, 0.18),
-    rgba(124, 58, 237, 0.14)
+    var(--bg-gradient-from),
+    var(--bg-gradient-to)
   );
   z-index: -2;
 }
@@ -159,6 +183,28 @@ body {
     transform 0.2s ease;
 }
 
+.form__field select,
+.filters__grid select {
+  color-scheme: dark;
+}
+
+body.theme-light .form__field select,
+body.theme-light .filters__grid select {
+  color-scheme: light;
+}
+
+.form__field select option,
+.filters__grid select option {
+  background-color: #ffffff;
+  color: #0f172a;
+}
+
+.form__field input::placeholder,
+.form__field select::placeholder {
+  color: var(--placeholder);
+  opacity: 1;
+}
+
 .form__field input:focus,
 .form__field select:focus {
   outline: none;
@@ -228,7 +274,7 @@ body {
   text-align: center;
   color: var(--muted);
   padding: 30px 10px;
-  border: 1px dashed rgba(255, 255, 255, 0.2);
+  border: 1px dashed var(--empty-border);
   border-radius: 14px;
 }
 
@@ -238,8 +284,8 @@ body {
   gap: 16px;
   padding: 14px 16px;
   border-radius: 14px;
-  background: rgba(15, 23, 42, 0.4);
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  background: var(--transaction-bg);
+  border: 1px solid var(--transaction-border);
   transition:
     transform 0.2s ease,
     background 0.2s ease;
@@ -247,7 +293,7 @@ body {
 
 .transaction:hover {
   transform: translateY(-2px);
-  background: rgba(15, 23, 42, 0.55);
+  background: var(--transaction-bg-hover);
 }
 
 .transaction__title {
@@ -267,8 +313,8 @@ body {
   padding: 4px 10px;
   border-radius: 999px;
   font-size: 12px;
-  background: rgba(56, 189, 248, 0.15);
-  color: #bae6fd;
+  background: var(--badge-bg);
+  color: var(--badge-text);
 }
 
 .amount {
@@ -337,9 +383,9 @@ body {
 #financeChart {
   width: 100%;
   height: 260px;
-  background: rgba(15, 23, 42, 0.35);
+  background: var(--chart-bg);
   border-radius: 14px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--chart-border);
   padding: 6px;
 }
 
@@ -349,7 +395,7 @@ body {
   text-align: center;
   color: var(--muted);
   padding: 30px 10px;
-  border: 1px dashed rgba(255, 255, 255, 0.2);
+  border: 1px dashed var(--empty-border);
   border-radius: 14px;
   justify-items: center;
 }
@@ -394,7 +440,7 @@ body {
 .modal__backdrop {
   position: absolute;
   inset: 0;
-  background: rgba(15, 23, 42, 0.65);
+  background: var(--modal-backdrop);
 }
 
 .modal__content {
@@ -430,11 +476,11 @@ body {
 }
 
 .toast {
-  background: rgba(15, 23, 42, 0.9);
+  background: var(--toast-bg);
   border: 1px solid var(--border);
   padding: 12px 16px;
   border-radius: 12px;
-  color: var(--text);
+  color: var(--toast-text);
   font-size: 14px;
   box-shadow: var(--shadow);
   animation: toast-in 0.2s ease;
@@ -457,7 +503,7 @@ body {
 .skeleton {
   position: fixed;
   inset: 0;
-  background: rgba(15, 23, 42, 0.95);
+  background: var(--skeleton-bg);
   display: grid;
   gap: 16px;
   padding: 40px;
@@ -502,6 +548,8 @@ body {
 }
 
 body.theme-light {
+  color-scheme: light;
+
   --bg: #f8fafc;
   --bg-accent: #e2e8f0;
   --card: rgba(15, 23, 42, 0.04);
@@ -511,14 +559,27 @@ body.theme-light {
   --border: rgba(15, 23, 42, 0.1);
   --primary: #1d4ed8;
   --shadow: 0 20px 40px rgba(15, 23, 42, 0.08);
-}
 
-body.theme-light .bg-gradient {
-  background: linear-gradient(
-    135deg,
-    rgba(15, 23, 42, 0.06),
-    rgba(29, 78, 216, 0.08)
-  );
+  --bg-radial-1: #f1f5f9;
+  --bg-radial-2: #52b8e7be;
+  --bg-radial-3: #a079e4be;
+  --bg-gradient-from: rgba(15, 23, 42, 0.06);
+  --bg-gradient-to: rgba(29, 78, 216, 0.08);
+
+  --transaction-bg: rgba(15, 23, 42, 0.04);
+  --transaction-bg-hover: rgba(15, 23, 42, 0.08);
+  --transaction-border: rgba(15, 23, 42, 0.08);
+  --chart-bg: rgba(255, 255, 255, 0.6);
+  --chart-border: rgba(15, 23, 42, 0.08);
+  --chart-base-line: rgba(15, 23, 42, 0.18);
+  --modal-backdrop: rgba(15, 23, 42, 0.35);
+  --toast-bg: #ffffff;
+  --toast-text: #0f172a;
+  --skeleton-bg: rgba(248, 250, 252, 0.95);
+  --empty-border: rgba(15, 23, 42, 0.18);
+  --placeholder: rgba(15, 23, 42, 0.45);
+  --badge-bg: rgba(14, 165, 233, 0.14);
+  --badge-text: #075985;
 }
 
 @media (max-width: 900px) {
