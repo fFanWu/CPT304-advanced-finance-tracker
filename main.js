@@ -50,6 +50,12 @@ const generateID = () => {
   return `tx_${Date.now()}_${Math.random().toString(16).slice(2)}`;
 };
 
+const escapeHtml = (str) => {
+  const div = document.createElement("div");
+  div.textContent = str;
+  return div.innerHTML;
+};
+
 const saveToLocalStorage = () => {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(state.transactions));
 };
@@ -119,6 +125,9 @@ const validateForm = () => {
 
   if (!title) {
     setError(dom.titleInput, dom.titleError, "Title is required.");
+    isValid = false;
+  } else if (title.length > 200) {
+    setError(dom.titleInput, dom.titleError, "Title must be 200 characters or fewer.");
     isValid = false;
   }
 
@@ -257,7 +266,7 @@ const renderTransactions = () => {
     .map(
       (group) => `
         <div class="month-group">
-          <p class="month-title">${group.label}</p>
+          <p class="month-title">${escapeHtml(group.label)}</p>
           ${group.items.map(renderTransactionItem).join("")}
         </div>
       `,
@@ -273,16 +282,16 @@ const renderTransactionItem = (tx) => {
   return `
     <div class="transaction">
       <div>
-        <p class="transaction__title">${tx.title}</p>
+        <p class="transaction__title">${escapeHtml(tx.title)}</p>
         <div class="transaction__meta">
-          <span class="badge">${tx.category}</span>
-          <span>${formattedDate}</span>
+          <span class="badge">${escapeHtml(tx.category)}</span>
+          <span>${escapeHtml(formattedDate)}</span>
         </div>
       </div>
       <div>
-        <p class="amount ${typeClass}">${formattedAmount}</p>
-        <button class="edit-btn" data-id="${tx.id}">Edit</button>
-        <button class="delete-btn" data-id="${tx.id}">Delete</button>
+        <p class="amount ${typeClass}">${escapeHtml(formattedAmount)}</p>
+        <button class="edit-btn" data-id="${escapeHtml(tx.id)}">Edit</button>
+        <button class="delete-btn" data-id="${escapeHtml(tx.id)}">Delete</button>
       </div>
     </div>
   `;
