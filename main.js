@@ -1,6 +1,7 @@
 "use strict";
 
 const STORAGE_KEY = "financeTrackerData";
+const STORAGE_VERSION = 1;
 const THEME_KEY = "financeTrackerTheme";
 
 const state = {
@@ -56,13 +57,67 @@ const escapeHtml = (str) => {
   return div.innerHTML;
 };
 
+const isValidTransaction = (tx) => {
+  if (tx === null || typeof tx !== "object") return false;
+  if (typeof tx.id !== "string" || tx.id.length === 0) return false;
+  if (typeof tx.title !== "string" || tx.title.length === 0) return false;
+  if (typeof tx.amount !== "number" || !Number.isFinite(tx.amount)) return false;
+  if (typeof tx.category !== "string" || tx.category.length === 0) return false;
+  if (typeof tx.date !== "string" || tx.date.length === 0) return false;
+  return true;
+};
+
 const saveToLocalStorage = () => {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(state.transactions));
+  try {
+    const payload = {
+      version: STORAGE_VERSION,
+      transactions: state.transactions,
+    };
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
+  } catch (e) {
+    if (e.name === "QuotaExceededError" || e.code === 22) {
+      showToast("Storage full. Could not save data.", "error");
+    }
+  }
 };
 
 const loadFromLocalStorage = () => {
-  const stored = localStorage.getItem(STORAGE_KEY);
-  state.transactions = stored ? JSON.parse(stored) : [];
+  const raw = localStorage.getItem(STORAGE_KEY);
+  if (!raw) {
+    state.transactions = [];
+    return;
+  }
+
+  let parsed;
+  try {
+    parsed = JSON.parse(raw);
+  } catch {
+    localStorage.setItem(STORAGE_KEY + ".corrupt", raw);
+    localStorage.removeItem(STORAGE_KEY);
+    state.transactions = [];
+    showToast("Stored data was corrupted and has been reset.", "error");
+    return;
+  }
+
+  let transactions;
+  if (Array.isArray(parsed)) {
+    transactions = parsed;
+  } else if (parsed && typeof parsed === "object" && Array.isArray(parsed.transactions)) {
+    transactions = parsed.transactions;
+  } else {
+    localStorage.setItem(STORAGE_KEY + ".corrupt", raw);
+    localStorage.removeItem(STORAGE_KEY);
+    state.transactions = [];
+    showToast("Stored data format unrecognized and has been reset.", "error");
+    return;
+  }
+
+  const valid = transactions.filter(isValidTransaction);
+  const discarded = transactions.length - valid.length;
+  if (discarded > 0) {
+    showToast(`${discarded} corrupted transaction(s) removed.`, "error");
+  }
+  state.transactions = valid;
 };
 
 const saveTheme = () => {
