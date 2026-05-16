@@ -1,3 +1,5 @@
+[![codecov](https://codecov.io/github/fFanWu/CPT304-advanced-finance-tracker/graph/badge.svg?token=HQ9Y8EZ3IB)](https://codecov.io/github/fFanWu/CPT304-advanced-finance-tracker)
+
 # Advanced Finance Tracker
 
 A portfolio-level personal finance management application built with HTML, CSS, and Vanilla JavaScript.  
