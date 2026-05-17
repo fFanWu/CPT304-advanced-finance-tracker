@@ -18,9 +18,11 @@
     <div class="app">
       <header class="app__header">
         <div>
-          <p class="app__eyebrow">Personal Finance</p>
-          <h1 class="app__title">Advanced Finance Tracker</h1>
-          <p class="app__subtitle">
+          <p class="app__eyebrow" data-i18n="header.eyebrow">Personal Finance</p>
+          <h1 class="app__title" data-i18n="header.title">
+            Advanced Finance Tracker
+          </h1>
+          <p class="app__subtitle" data-i18n="header.subtitle">
             Track income, expenses, and your balance with clarity.
           </p>
         </div>
@@ -28,28 +30,49 @@
           <button class="btn btn--ghost" id="themeToggleBtn" type="button">
             Light Mode
           </button>
-          <button class="btn btn--accent" id="exportCsvBtn" type="button">
+          <button
+            class="btn btn--accent"
+            id="exportCsvBtn"
+            type="button"
+            data-i18n="actions.exportCsv"
+          >
             Export CSV
           </button>
-          <button class="btn btn--ghost" id="resetFiltersBtn" type="button">
+          <button
+            class="btn btn--ghost"
+            id="resetFiltersBtn"
+            type="button"
+            data-i18n="actions.resetFilters"
+          >
             Reset Filters
+          </button>
+          <button
+            class="btn btn--ghost"
+            id="langToggleBtn"
+            type="button"
+            data-i18n="actions.langToggle"
+            aria-label="Toggle language"
+          >
+            中文
           </button>
         </div>
       </header>
 
       <section class="summary">
         <div class="card summary__card">
-          <p class="summary__label">Total Balance</p>
+          <p class="summary__label" data-i18n="summary.balance">Total Balance</p>
           <h2 class="summary__value" id="totalBalance">$0.00</h2>
         </div>
         <div class="card summary__card">
-          <p class="summary__label">Total Income</p>
+          <p class="summary__label" data-i18n="summary.income">Total Income</p>
           <h2 class="summary__value summary__value--income" id="totalIncome">
             $0.00
           </h2>
         </div>
         <div class="card summary__card">
-          <p class="summary__label">Total Expenses</p>
+          <p class="summary__label" data-i18n="summary.expenses">
+            Total Expenses
+          </p>
           <h2 class="summary__value summary__value--expense" id="totalExpenses">
             $0.00
           </h2>
@@ -58,70 +81,96 @@
 
       <section class="card chart">
         <div class="transactions__header">
-          <h3 class="section-title">Cash Flow Overview</h3>
-          <p class="transactions__meta">Income vs Expense</p>
+          <h3 class="section-title" data-i18n="chart.title">
+            Cash Flow Overview
+          </h3>
+          <p class="transactions__meta" data-i18n="chart.subtitle">
+            Income vs Expense
+          </p>
         </div>
         <canvas id="financeChart" width="800" height="260"></canvas>
       </section>
 
       <section class="grid">
         <div class="card form">
-          <h3 class="section-title">Add Transaction</h3>
+          <h3 class="section-title" data-i18n="form.heading">Add Transaction</h3>
           <form id="transactionForm" class="form__grid" autocomplete="off">
             <label class="form__field">
-              <span>Title</span>
+              <span data-i18n="form.titleLabel">Title</span>
               <input
                 id="titleInput"
                 type="text"
                 placeholder="e.g., Freelance Payment"
+                data-i18n-attr="placeholder:form.titlePlaceholder"
                 required
               />
               <small class="error" id="titleError"></small>
             </label>
 
             <label class="form__field">
-              <span>Amount</span>
+              <span data-i18n="form.amountLabel">Amount</span>
               <input
                 id="amountInput"
                 type="number"
                 placeholder="e.g., 1200 or -45"
+                data-i18n-attr="placeholder:form.amountPlaceholder"
                 required
               />
               <small class="error" id="amountError"></small>
             </label>
 
             <label class="form__field">
-              <span>Category</span>
+              <span data-i18n="form.categoryLabel">Category</span>
               <select id="categoryInput" required>
-                <option value="" disabled selected>Select category</option>
-                <option>Salary</option>
-                <option>Business</option>
-                <option>Investments</option>
-                <option>Housing</option>
-                <option>Food</option>
-                <option>Transport</option>
-                <option>Health</option>
-                <option>Entertainment</option>
-                <option>Education</option>
-                <option>Other</option>
+                <option value="" disabled selected data-i18n="form.categoryPlaceholder">
+                  Select category
+                </option>
+                <option value="Salary" data-i18n="category.salary">Salary</option>
+                <option value="Business" data-i18n="category.business">
+                  Business
+                </option>
+                <option value="Investments" data-i18n="category.investments">
+                  Investments
+                </option>
+                <option value="Housing" data-i18n="category.housing">
+                  Housing
+                </option>
+                <option value="Food" data-i18n="category.food">Food</option>
+                <option value="Transport" data-i18n="category.transport">
+                  Transport
+                </option>
+                <option value="Health" data-i18n="category.health">Health</option>
+                <option value="Entertainment" data-i18n="category.entertainment">
+                  Entertainment
+                </option>
+                <option value="Education" data-i18n="category.education">
+                  Education
+                </option>
+                <option value="Other" data-i18n="category.other">Other</option>
               </select>
               <small class="error" id="categoryError"></small>
             </label>
 
             <label class="form__field">
-              <span>Date</span>
+              <span data-i18n="form.dateLabel">Date</span>
               <input id="dateInput" type="date" required />
               <small class="error" id="dateError"></small>
             </label>
 
             <div class="form__actions">
-              <button class="btn btn--primary" type="submit" id="submitBtn">
+              <button
+                class="btn btn--primary"
+                type="submit"
+                id="submitBtn"
+                data-i18n="form.submitAdd"
+              >
                 Add Transaction
               </button>
               <button
                 class="btn btn--ghost"
                 type="button"
                 id="cancelEditBtn"
+                data-i18n="form.cancelEdit"
                 hidden
               >
                 Cancel Edit
@@ -131,40 +180,61 @@
         </div>
 
         <div class="card filters">
-          <h3 class="section-title">Filters & Search</h3>
+          <h3 class="section-title" data-i18n="filters.heading">
+            Filters & Search
+          </h3>
           <div class="filters__grid">
             <label class="form__field">
-              <span>Category</span>
+              <span data-i18n="filters.categoryLabel">Category</span>
               <select id="filterCategory">
-                <option value="all">All categories</option>
-                <option>Salary</option>
-                <option>Business</option>
-                <option>Investments</option>
-                <option>Housing</option>
-                <option>Food</option>
-                <option>Transport</option>
-                <option>Health</option>
-                <option>Entertainment</option>
-                <option>Education</option>
-                <option>Other</option>
+                <option value="all" data-i18n="filters.allCategories">
+                  All categories
+                </option>
+                <option value="Salary" data-i18n="category.salary">Salary</option>
+                <option value="Business" data-i18n="category.business">
+                  Business
+                </option>
+                <option value="Investments" data-i18n="category.investments">
+                  Investments
+                </option>
+                <option value="Housing" data-i18n="category.housing">
+                  Housing
+                </option>
+                <option value="Food" data-i18n="category.food">Food</option>
+                <option value="Transport" data-i18n="category.transport">
+                  Transport
+                </option>
+                <option value="Health" data-i18n="category.health">Health</option>
+                <option value="Entertainment" data-i18n="category.entertainment">
+                  Entertainment
+                </option>
+                <option value="Education" data-i18n="category.education">
+                  Education
+                </option>
+                <option value="Other" data-i18n="category.other">Other</option>
               </select>
             </label>
 
             <label class="form__field">
-              <span>Type</span>
+              <span data-i18n="filters.typeLabel">Type</span>
               <select id="filterType">
-                <option value="all">All</option>
-                <option value="income">Income</option>
-                <option value="expense">Expense</option>
+                <option value="all" data-i18n="filters.typeAll">All</option>
+                <option value="income" data-i18n="filters.typeIncome">
+                  Income
+                </option>
+                <option value="expense" data-i18n="filters.typeExpense">
+                  Expense
+                </option>
               </select>
             </label>
 
             <label class="form__field form__field--full">
-              <span>Search by title</span>
+              <span data-i18n="filters.searchLabel">Search by title</span>
               <input
                 id="searchInput"
                 type="text"
                 placeholder="Start typing..."
+                data-i18n-attr="placeholder:filters.searchPlaceholder"
               />
             </label>
           </div>
@@ -173,15 +243,23 @@
 
       <section class="card transactions">
         <div class="transactions__header">
-          <h3 class="section-title">Transactions</h3>
+          <h3 class="section-title" data-i18n="transactions.heading">
+            Transactions
+          </h3>
           <p class="transactions__meta" id="resultsCount">0 results</p>
         </div>
 
         <div class="transactions__list" id="transactionsList">
           <div class="transactions__empty">
             <div class="empty__icon">+</div>
-            <p>No transactions yet. Add your first one to get started.</p>
-            <button class="btn btn--accent empty-add-btn" type="button">
+            <p data-i18n="transactions.empty">
+              No transactions yet. Add your first one to get started.
+            </p>
+            <button
+              class="btn btn--accent empty-add-btn"
+              type="button"
+              data-i18n="transactions.addFirst"
+            >
               Add First Transaction
             </button>
           </div>
@@ -189,11 +267,18 @@
       </section>
 
       <footer class="app__footer">
-        <p class="app__footer-text">
+        <p class="app__footer-text" data-i18n="footer.text">
           All data is stored locally in your browser and never sent to any
           server.
         </p>
-        <a class="app__footer-link" href="privacy.html">Privacy Policy</a>
+        <a
+          class="app__footer-link"
+          id="privacyLink"
+          href="privacy.html"
+          data-i18n="footer.privacy"
+        >
+          Privacy Policy
+        </a>
       </footer>
     </div>
 
@@ -205,13 +290,31 @@
         aria-modal="true"
         aria-labelledby="confirmTitle"
       >
-        <h3 class="section-title" id="confirmTitle">Delete transaction?</h3>
-        <p class="modal__text">This action cannot be undone.</p>
+        <h3
+          class="section-title"
+          id="confirmTitle"
+          data-i18n="modal.deleteTitle"
+        >
+          Delete transaction?
+        </h3>
+        <p class="modal__text" data-i18n="modal.deleteText">
+          This action cannot be undone.
+        </p>
         <div class="modal__actions">
-          <button class="btn btn--ghost" id="cancelDeleteBtn" type="button">
+          <button
+            class="btn btn--ghost"
+            id="cancelDeleteBtn"
+            type="button"
+            data-i18n="modal.cancel"
+          >
             Cancel
           </button>
-          <button class="btn btn--danger" id="confirmDeleteBtn" type="button">
+          <button
+            class="btn btn--danger"
+            id="confirmDeleteBtn"
+            type="button"
+            data-i18n="modal.delete"
+          >
             Delete
           </button>
         </div>
@@ -231,15 +334,26 @@
     >
       <div class="cookie-banner__content">
         <p class="cookie-banner__text">
-          We use browser <strong>localStorage</strong> to save your transactions
-          and theme preference on this device. No data is sent to any server.
-          See our <a href="privacy.html">Privacy Policy</a> for details.
+          <span data-i18n="banner.message">
+            We use browser localStorage to save your transactions and theme
+            preference on this device. No data is sent to any server.
+          </span>
+          <span data-i18n="banner.privacyHint">See our</span>
+          <a
+            href="privacy.html"
+            id="bannerPrivacyLink"
+            data-i18n="banner.privacyLink"
+          >
+            Privacy Policy
+          </a>
+          <span data-i18n="banner.privacyTail">for details.</span>
         </p>
         <div class="cookie-banner__actions">
           <button
             class="btn btn--ghost"
             id="cookieRejectBtn"
             type="button"
+            data-i18n="banner.reject"
           >
             Reject
           </button>
@@ -247,6 +361,7 @@
             class="btn btn--primary"
             id="cookieAcceptBtn"
             type="button"
+            data-i18n="banner.accept"
           >
             Accept
           </button>

@@ -1,0 +1,108 @@
+{
+  "header": {
+    "eyebrow": "个人财务",
+    "title": "高级财务追踪器",
+    "subtitle": "清晰追踪你的收入、支出与余额。"
+  },
+  "actions": {
+    "lightMode": "浅色模式",
+    "darkMode": "深色模式",
+    "exportCsv": "导出 CSV",
+    "resetFilters": "重置筛选",
+    "langToggle": "EN"
+  },
+  "summary": {
+    "balance": "总余额",
+    "income": "总收入",
+    "expenses": "总支出"
+  },
+  "chart": {
+    "title": "现金流概览",
+    "subtitle": "收入与支出对比"
+  },
+  "form": {
+    "heading": "添加交易",
+    "titleLabel": "标题",
+    "titlePlaceholder": "如：自由职业收入",
+    "amountLabel": "金额",
+    "amountPlaceholder": "如：1200 或 -45",
+    "categoryLabel": "类别",
+    "categoryPlaceholder": "选择类别",
+    "dateLabel": "日期",
+    "submitAdd": "添加交易",
+    "submitSave": "保存修改",
+    "cancelEdit": "取消编辑"
+  },
+  "filters": {
+    "heading": "筛选与搜索",
+    "categoryLabel": "类别",
+    "allCategories": "全部类别",
+    "typeLabel": "类型",
+    "typeAll": "全部",
+    "typeIncome": "收入",
+    "typeExpense": "支出",
+    "searchLabel": "按标题搜索",
+    "searchPlaceholder": "开始输入..."
+  },
+  "category": {
+    "salary": "工资",
+    "business": "经营",
+    "investments": "投资",
+    "housing": "住房",
+    "food": "餐饮",
+    "transport": "交通",
+    "health": "医疗",
+    "entertainment": "娱乐",
+    "education": "教育",
+    "other": "其他"
+  },
+  "transactions": {
+    "heading": "交易明细",
+    "results": "条结果",
+    "empty": "暂无交易记录，添加你的第一条以开始使用。",
+    "addFirst": "添加第一条交易",
+    "edit": "编辑",
+    "delete": "删除"
+  },
+  "modal": {
+    "deleteTitle": "删除该交易？",
+    "deleteText": "此操作无法撤销。",
+    "cancel": "取消",
+    "delete": "删除"
+  },
+  "toast": {
+    "added": "交易已添加。",
+    "updated": "交易已更新。",
+    "deleted": "交易已删除。",
+    "editing": "已进入编辑模式。",
+    "csvExported": "CSV 已导出。",
+    "noData": "没有可导出的数据。",
+    "fixFields": "请修正高亮的字段。",
+    "storageFull": "存储空间已满，无法保存数据。",
+    "corrupt": "存储的数据已损坏，已被重置。",
+    "unrecognized": "存储的数据格式无法识别，已被重置。",
+    "discarded": "已移除 {count} 条损坏的交易。",
+    "consentRequired": "数据未保存：需要存储授权。请点击横幅上的“同意”以启用保存。",
+    "consentGranted": "已授予存储权限，你的数据将保存在本设备上。",
+    "consentDeclined": "已拒绝存储授权，数据仅在本次会话中保留。"
+  },
+  "error": {
+    "titleRequired": "标题为必填项。",
+    "titleTooLong": "标题不得超过 200 个字符。",
+    "amountInvalid": "请输入有效的金额。",
+    "categoryRequired": "请选择类别。",
+    "dateRequired": "请选择日期。"
+  },
+  "banner": {
+    "message": "我们使用浏览器 localStorage 在本设备上保存你的交易与主题偏好，不会向任何服务器发送数据。",
+    "privacyHint": "详情请查看我们的",
+    "privacyLink": "隐私政策",
+    "privacyTail": "。",
+    "accept": "同意",
+    "reject": "拒绝"
+  },
+  "footer": {
+    "text": "所有数据仅保存在你的浏览器本地，绝不发送至任何服务器。",
+    "privacy": "隐私政策"
+  }
+}
