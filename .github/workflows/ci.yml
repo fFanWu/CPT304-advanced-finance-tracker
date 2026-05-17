@@ -4,31 +4,30 @@ on:
   push:
     branches:
       - main
-      - testcoverage
   pull_request:
     branches:
       - main
-      - testcoverage
 
 jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Setup Node
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: 20
+          cache: npm
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci
 
       - name: Run tests with coverage
         run: npm run test:coverage
-        continue-on-error: true   
 
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v5
         with:
+          files: ./coverage/lcov.info
           token: ${{ secrets.CODECOV_TOKEN }}
