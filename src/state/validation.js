@@ -5,21 +5,21 @@ export const validateTransactionInput = ({ title, amount, category, date }) => {
   const amountNum = Number(amount);
 
   if (!trimmedTitle) {
-    errors.title = "Title is required.";
+    errors.title = "error.titleRequired";
   } else if (trimmedTitle.length > 200) {
-    errors.title = "Title must be 200 characters or fewer.";
+    errors.title = "error.titleTooLong";
   }
 
   if (!amount || Number.isNaN(amountNum) || amountNum === 0) {
-    errors.amount = "Enter a valid amount.";
+    errors.amount = "error.amountInvalid";
   }
 
   if (!category) {
-    errors.category = "Select a category.";
+    errors.category = "error.categoryRequired";
   }
 
   if (!date) {
-    errors.date = "Pick a date.";
+    errors.date = "error.dateRequired";
   }
 
   return {

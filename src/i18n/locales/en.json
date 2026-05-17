@@ -1,0 +1,108 @@
+{
+  "header": {
+    "eyebrow": "Personal Finance",
+    "title": "Advanced Finance Tracker",
+    "subtitle": "Track income, expenses, and your balance with clarity."
+  },
+  "actions": {
+    "lightMode": "Light Mode",
+    "darkMode": "Dark Mode",
+    "exportCsv": "Export CSV",
+    "resetFilters": "Reset Filters",
+    "langToggle": "中文"
+  },
+  "summary": {
+    "balance": "Total Balance",
+    "income": "Total Income",
+    "expenses": "Total Expenses"
+  },
+  "chart": {
+    "title": "Cash Flow Overview",
+    "subtitle": "Income vs Expense"
+  },
+  "form": {
+    "heading": "Add Transaction",
+    "titleLabel": "Title",
+    "titlePlaceholder": "e.g., Freelance Payment",
+    "amountLabel": "Amount",
+    "amountPlaceholder": "e.g., 1200 or -45",
+    "categoryLabel": "Category",
+    "categoryPlaceholder": "Select category",
+    "dateLabel": "Date",
+    "submitAdd": "Add Transaction",
+    "submitSave": "Save Changes",
+    "cancelEdit": "Cancel Edit"
+  },
+  "filters": {
+    "heading": "Filters & Search",
+    "categoryLabel": "Category",
+    "allCategories": "All categories",
+    "typeLabel": "Type",
+    "typeAll": "All",
+    "typeIncome": "Income",
+    "typeExpense": "Expense",
+    "searchLabel": "Search by title",
+    "searchPlaceholder": "Start typing..."
+  },
+  "category": {
+    "salary": "Salary",
+    "business": "Business",
+    "investments": "Investments",
+    "housing": "Housing",
+    "food": "Food",
+    "transport": "Transport",
+    "health": "Health",
+    "entertainment": "Entertainment",
+    "education": "Education",
+    "other": "Other"
+  },
+  "transactions": {
+    "heading": "Transactions",
+    "results": "results",
+    "empty": "No transactions yet. Add your first one to get started.",
+    "addFirst": "Add First Transaction",
+    "edit": "Edit",
+    "delete": "Delete"
+  },
+  "modal": {
+    "deleteTitle": "Delete transaction?",
+    "deleteText": "This action cannot be undone.",
+    "cancel": "Cancel",
+    "delete": "Delete"
+  },
+  "toast": {
+    "added": "Transaction added.",
+    "updated": "Transaction updated.",
+    "deleted": "Transaction deleted.",
+    "editing": "Editing mode enabled.",
+    "csvExported": "CSV exported.",
+    "noData": "No data to export.",
+    "fixFields": "Please fix the highlighted fields.",
+    "storageFull": "Storage full. Could not save data.",
+    "corrupt": "Stored data was corrupted and has been reset.",
+    "unrecognized": "Stored data format unrecognized and has been reset.",
+    "discarded": "{count} corrupted transaction(s) removed.",
+    "consentRequired": "Data not saved: storage consent required. Click Accept on the banner to enable saving.",
+    "consentGranted": "Storage consent granted. Your data will be saved on this device.",
+    "consentDeclined": "Storage consent declined. Data will only persist for this session."
+  },
+  "error": {
+    "titleRequired": "Title is required.",
+    "titleTooLong": "Title must be 200 characters or fewer.",
+    "amountInvalid": "Enter a valid amount.",
+    "categoryRequired": "Select a category.",
+    "dateRequired": "Pick a date."
+  },
+  "banner": {
+    "message": "We use browser localStorage to save your transactions and theme preference on this device. No data is sent to any server.",
+    "privacyHint": "See our",
+    "privacyLink": "Privacy Policy",
+    "privacyTail": "for details.",
+    "accept": "Accept",
+    "reject": "Reject"
+  },
+  "footer": {
+    "text": "All data is stored locally in your browser and never sent to any server.",
+    "privacy": "Privacy Policy"
+  }
+}

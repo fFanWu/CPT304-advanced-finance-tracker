@@ -10,6 +10,18 @@ import { renderSummary, renderTransactions } from "./render/render.js";
 import { renderChart } from "./render/chart.js";
 import { hasConsented } from "./consent/consent.js";
 import { initBanner } from "./consent/banner.js";
+import {
+  initI18n,
+  setLang,
+  getLang,
+  t,
+  applyTranslations,
+  loadLang,
+} from "./i18n/i18n.js";
+import en from "./i18n/locales/en.json" with { type: "json" };
+import zh from "./i18n/locales/zh.json" with { type: "json" };
+
+const SUPPORTED_LANGS = ["en", "zh"];
 
 const state = {
   transactions: [],
@@ -37,6 +49,7 @@ const dom = {
   resetFiltersBtn: document.getElementById("resetFiltersBtn"),
   exportCsvBtn: document.getElementById("exportCsvBtn"),
   themeToggleBtn: document.getElementById("themeToggleBtn"),
+  langToggleBtn: document.getElementById("langToggleBtn"),
   transactionsList: document.getElementById("transactionsList"),
   resultsCount: document.getElementById("resultsCount"),
   totalBalance: document.getElementById("totalBalance"),
@@ -51,16 +64,15 @@ const dom = {
   cookieBanner: document.getElementById("cookieBanner"),
   cookieAcceptBtn: document.getElementById("cookieAcceptBtn"),
   cookieRejectBtn: document.getElementById("cookieRejectBtn"),
+  privacyLink: document.getElementById("privacyLink"),
+  bannerPrivacyLink: document.getElementById("bannerPrivacyLink"),
 };
 
 let consentToastShown = false;
 const notifyNoConsentOnce = () => {
   if (consentToastShown) return;
   consentToastShown = true;
-  showToast(
-    "Data not saved: storage consent required. Click Accept on the banner to enable saving.",
-    "error",
-  );
+  showToast(t("toast.consentRequired"), "error");
 };
 
 const showToast = (message, variant = "success") => {
@@ -70,6 +82,9 @@ const showToast = (message, variant = "success") => {
   dom.toastContainer.appendChild(toast);
   setTimeout(() => toast.remove(), 2400);
 };
+
+const formatTemplate = (template, vars = {}) =>
+  template.replace(/\{(\w+)\}/g, (m, k) => (k in vars ? String(vars[k]) : m));
 
 const clearErrors = () => {
   const fields = [
@@ -84,15 +99,32 @@ const clearErrors = () => {
   });
 };
 
-const setError = (input, errorEl, message) => {
+const setError = (input, errorEl, errorKey) => {
   input.classList.add("is-invalid");
-  errorEl.textContent = message;
+  errorEl.textContent = t(errorKey);
+};
+
+const updateThemeButtonLabel = () => {
+  dom.themeToggleBtn.textContent =
+    state.theme === "light" ? t("actions.darkMode") : t("actions.lightMode");
+};
+
+const updateSubmitButtonLabel = () => {
+  dom.submitBtn.textContent = state.editingId
+    ? t("form.submitSave")
+    : t("form.submitAdd");
+};
+
+const updatePrivacyLinks = () => {
+  const target = getLang() === "zh" ? "privacy.zh.html" : "privacy.html";
+  if (dom.privacyLink) dom.privacyLink.setAttribute("href", target);
+  if (dom.bannerPrivacyLink) dom.bannerPrivacyLink.setAttribute("href", target);
 };
 
 const setTheme = (theme) => {
   state.theme = theme;
   document.body.classList.toggle("theme-light", theme === "light");
-  dom.themeToggleBtn.textContent = theme === "light" ? "Dark Mode" : "Light Mode";
+  updateThemeButtonLabel();
   const result = persistTheme(theme, hasConsented());
   if (!result.ok && result.error === "no-consent") {
     notifyNoConsentOnce();
@@ -102,7 +134,7 @@ const setTheme = (theme) => {
 
 const renderApp = () => {
   renderSummary(dom, state.transactions);
-  renderTransactions(dom, state.transactions, state.filters);
+  renderTransactions(dom, state.transactions, state.filters, t);
   renderChart(dom.financeChart, state.transactions);
 };
 
@@ -112,7 +144,7 @@ const save = () => {
     if (result.error === "no-consent") {
       notifyNoConsentOnce();
     } else if (result.error === "quota") {
-      showToast("Storage full. Could not save data.", "error");
+      showToast(t("toast.storageFull"), "error");
     }
   }
 };
@@ -120,7 +152,7 @@ const save = () => {
 const resetFormState = () => {
   dom.form.reset();
   state.editingId = null;
-  dom.submitBtn.textContent = "Add Transaction";
+  updateSubmitButtonLabel();
   dom.cancelEditBtn.hidden = true;
   clearErrors();
 };
@@ -145,7 +177,7 @@ const addTransaction = () => {
     if (errors.amount) setError(dom.amountInput, dom.amountError, errors.amount);
     if (errors.category) setError(dom.categoryInput, dom.categoryError, errors.category);
     if (errors.date) setError(dom.dateInput, dom.dateError, errors.date);
-    showToast("Please fix the highlighted fields.", "error");
+    showToast(t("toast.fixFields"), "error");
     return;
   }
 
@@ -155,13 +187,13 @@ const addTransaction = () => {
     state.transactions = state.transactions.map((tx) =>
       tx.id === state.editingId ? { ...tx, title, amount, category, date } : tx,
     );
-    showToast("Transaction updated.");
+    showToast(t("toast.updated"));
   } else {
     state.transactions = [
       { id: generateID(), title, amount, category, date },
       ...state.transactions,
     ];
-    showToast("Transaction added.");
+    showToast(t("toast.added"));
   }
 
   resetFormState();
@@ -179,17 +211,17 @@ const startEditing = (id) => {
   dom.dateInput.value = transaction.date;
 
   state.editingId = id;
-  dom.submitBtn.textContent = "Save Changes";
+  updateSubmitButtonLabel();
   dom.cancelEditBtn.hidden = false;
   dom.titleInput.focus();
-  showToast("Editing mode enabled.");
+  showToast(t("toast.editing"));
 };
 
 const deleteTransaction = (id) => {
   state.transactions = state.transactions.filter((tx) => tx.id !== id);
   save();
   renderApp();
-  showToast("Transaction deleted.");
+  showToast(t("toast.deleted"));
 };
 
 const openConfirmModal = (id) => {
@@ -206,7 +238,7 @@ const closeConfirmModal = () => {
 
 const exportToCSV = () => {
   if (state.transactions.length === 0) {
-    showToast("No data to export.", "error");
+    showToast(t("toast.noData"), "error");
     return;
   }
 
@@ -226,20 +258,42 @@ const exportToCSV = () => {
   link.click();
   link.remove();
   URL.revokeObjectURL(url);
-  showToast("CSV exported.");
+  showToast(t("toast.csvExported"));
+};
+
+const refreshUiLanguage = () => {
+  applyTranslations(document);
+  document.documentElement.lang = getLang();
+  updateThemeButtonLabel();
+  updateSubmitButtonLabel();
+  updatePrivacyLinks();
+  renderApp();
+};
+
+const toggleLanguage = () => {
+  const next = getLang() === "en" ? "zh" : "en";
+  setLang(next);
+  refreshUiLanguage();
 };
 
 const initializeApp = () => {
+  const stored = loadLang();
+  const initialLang = SUPPORTED_LANGS.includes(stored) ? stored : "en";
+  initI18n({ defaultLang: initialLang, translations: { en, zh } });
+  applyTranslations(document);
+  document.documentElement.lang = getLang();
+  updatePrivacyLinks();
+
   const { transactions, discarded, error } = loadTransactions();
   state.transactions = transactions;
 
   if (error === "corrupt_json") {
-    showToast("Stored data was corrupted and has been reset.", "error");
+    showToast(t("toast.corrupt"), "error");
   } else if (error === "unrecognized_format") {
-    showToast("Stored data format unrecognized and has been reset.", "error");
+    showToast(t("toast.unrecognized"), "error");
   }
   if (discarded > 0) {
-    showToast(`${discarded} corrupted transaction(s) removed.`, "error");
+    showToast(formatTemplate(t("toast.discarded"), { count: discarded }), "error");
   }
 
   setTheme(retrieveTheme());
@@ -266,17 +320,17 @@ const initializeApp = () => {
 
   dom.filterCategory.addEventListener("change", (e) => {
     state.filters.category = e.target.value;
-    renderTransactions(dom, state.transactions, state.filters);
+    renderTransactions(dom, state.transactions, state.filters, t);
   });
 
   dom.filterType.addEventListener("change", (e) => {
     state.filters.type = e.target.value;
-    renderTransactions(dom, state.transactions, state.filters);
+    renderTransactions(dom, state.transactions, state.filters, t);
   });
 
   dom.searchInput.addEventListener("input", (e) => {
     state.filters.search = e.target.value;
-    renderTransactions(dom, state.transactions, state.filters);
+    renderTransactions(dom, state.transactions, state.filters, t);
   });
 
   dom.resetFiltersBtn.addEventListener("click", () => {
@@ -284,13 +338,17 @@ const initializeApp = () => {
     dom.filterCategory.value = "all";
     dom.filterType.value = "all";
     dom.searchInput.value = "";
-    renderTransactions(dom, state.transactions, state.filters);
+    renderTransactions(dom, state.transactions, state.filters, t);
   });
 
   dom.exportCsvBtn.addEventListener("click", exportToCSV);
   dom.themeToggleBtn.addEventListener("click", () => {
     setTheme(state.theme === "dark" ? "light" : "dark");
   });
+
+  if (dom.langToggleBtn) {
+    dom.langToggleBtn.addEventListener("click", toggleLanguage);
+  }
 
   dom.confirmDeleteBtn.addEventListener("click", () => {
     if (state.pendingDeleteId) deleteTransaction(state.pendingDeleteId);
@@ -311,13 +369,10 @@ const initializeApp = () => {
       consentToastShown = false;
       saveTransactions(state.transactions, true);
       persistTheme(state.theme, true);
-      showToast("Storage consent granted. Your data will be saved on this device.");
+      showToast(t("toast.consentGranted"));
     },
     onReject: () => {
-      showToast(
-        "Storage consent declined. Data will only persist for this session.",
-        "error",
-      );
+      showToast(t("toast.consentDeclined"), "error");
     },
   });
 };
