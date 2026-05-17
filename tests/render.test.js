@@ -44,6 +44,16 @@ describe("renderTransactionItem", () => {
 
 describe("renderTransactions", () => {
   let dom;
+  const mockT = (key) => {
+    const translations = {
+      "transactions.results": "results",
+      "transactions.empty": "No transactions yet. Add your first one to get started.",
+      "transactions.addFirst": "Add First Transaction",
+      "transactions.edit": "Edit",
+      "transactions.delete": "Delete",
+    };
+    return translations[key] ?? key;
+  };
 
   beforeEach(() => {
     dom = {
@@ -61,7 +71,7 @@ describe("renderTransactions", () => {
       category: "Food",
       type: "all",
       search: "",
-    });
+    }, mockT);
 
     expect(dom.resultsCount.textContent).toBe("0 results");
     expect(dom.transactionsList.innerHTML).toContain("No transactions yet");
@@ -78,7 +88,7 @@ describe("renderTransactions", () => {
       category: "all",
       type: "all",
       search: "",
-    });
+    }, mockT);
 
     expect(dom.resultsCount.textContent).toBe("2 results");
     expect(dom.transactionsList.innerHTML).toContain("month-group");
