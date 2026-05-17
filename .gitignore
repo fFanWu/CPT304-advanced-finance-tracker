@@ -1,7 +1,2 @@
-<<<<<<< HEAD
-/coverage
 /node_modules
-=======
-node_modules/
-coverage/
->>>>>>> 6d754d9f4a016616f230f58ac103a3903ecfe9eb
+/coverage
