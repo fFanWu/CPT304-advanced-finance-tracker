@@ -12,7 +12,10 @@ export const isValidTransaction = (tx) => {
   return true;
 };
 
-export const saveTransactions = (transactions) => {
+export const saveTransactions = (transactions, hasConsent) => {
+  if (!hasConsent) {
+    return { ok: false, error: "no-consent" };
+  }
   try {
     const payload = {
       version: STORAGE_VERSION,
@@ -59,8 +62,19 @@ export const loadTransactions = () => {
   return { transactions: valid, discarded, error: null };
 };
 
-export const saveTheme = (theme) => {
-  localStorage.setItem(THEME_KEY, theme);
+export const saveTheme = (theme, hasConsent) => {
+  if (!hasConsent) {
+    return { ok: false, error: "no-consent" };
+  }
+  try {
+    localStorage.setItem(THEME_KEY, theme);
+    return { ok: true };
+  } catch (e) {
+    if (e.name === "QuotaExceededError" || e.code === 22) {
+      return { ok: false, error: "quota" };
+    }
+    return { ok: false, error: "unknown" };
+  }
 };
 
 export const loadTheme = () => {

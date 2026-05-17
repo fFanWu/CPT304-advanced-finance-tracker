@@ -8,6 +8,8 @@ import {
 } from "./state/storage.js";
 import { renderSummary, renderTransactions } from "./render/render.js";
 import { renderChart } from "./render/chart.js";
+import { hasConsented } from "./consent/consent.js";
+import { initBanner } from "./consent/banner.js";
 
 const state = {
   transactions: [],
@@ -46,6 +48,19 @@ const dom = {
   cancelDeleteBtn: document.getElementById("cancelDeleteBtn"),
   toastContainer: document.getElementById("toastContainer"),
   skeleton: document.getElementById("skeleton"),
+  cookieBanner: document.getElementById("cookieBanner"),
+  cookieAcceptBtn: document.getElementById("cookieAcceptBtn"),
+  cookieRejectBtn: document.getElementById("cookieRejectBtn"),
+};
+
+let consentToastShown = false;
+const notifyNoConsentOnce = () => {
+  if (consentToastShown) return;
+  consentToastShown = true;
+  showToast(
+    "Data not saved: storage consent required. Click Accept on the banner to enable saving.",
+    "error",
+  );
 };
 
 const showToast = (message, variant = "success") => {
@@ -78,7 +93,10 @@ const setTheme = (theme) => {
   state.theme = theme;
   document.body.classList.toggle("theme-light", theme === "light");
   dom.themeToggleBtn.textContent = theme === "light" ? "Dark Mode" : "Light Mode";
-  persistTheme(theme);
+  const result = persistTheme(theme, hasConsented());
+  if (!result.ok && result.error === "no-consent") {
+    notifyNoConsentOnce();
+  }
   renderChart(dom.financeChart, state.transactions);
 };
 
@@ -89,9 +107,13 @@ const renderApp = () => {
 };
 
 const save = () => {
-  const result = saveTransactions(state.transactions);
-  if (!result.ok && result.error === "quota") {
-    showToast("Storage full. Could not save data.", "error");
+  const result = saveTransactions(state.transactions, hasConsented());
+  if (!result.ok) {
+    if (result.error === "no-consent") {
+      notifyNoConsentOnce();
+    } else if (result.error === "quota") {
+      showToast("Storage full. Could not save data.", "error");
+    }
   }
 };
 
@@ -279,6 +301,24 @@ const initializeApp = () => {
 
   dom.confirmModal.addEventListener("click", (e) => {
     if (e.target.dataset.close) closeConfirmModal();
+  });
+
+  initBanner({
+    banner: dom.cookieBanner,
+    acceptBtn: dom.cookieAcceptBtn,
+    rejectBtn: dom.cookieRejectBtn,
+    onAccept: () => {
+      consentToastShown = false;
+      saveTransactions(state.transactions, true);
+      persistTheme(state.theme, true);
+      showToast("Storage consent granted. Your data will be saved on this device.");
+    },
+    onReject: () => {
+      showToast(
+        "Storage consent declined. Data will only persist for this session.",
+        "error",
+      );
+    },
   });
 };
 
