@@ -187,6 +187,14 @@
           </div>
         </div>
       </section>
+
+      <footer class="app__footer">
+        <p class="app__footer-text">
+          All data is stored locally in your browser and never sent to any
+          server.
+        </p>
+        <a class="app__footer-link" href="privacy.html">Privacy Policy</a>
+      </footer>
     </div>
 
     <div class="modal" id="confirmModal" aria-hidden="true">
@@ -211,6 +219,40 @@
     </div>
 
     <div class="toast-container" id="toastContainer"></div>
+
+    <div
+      class="cookie-banner"
+      id="cookieBanner"
+      role="dialog"
+      aria-live="polite"
+      aria-label="Privacy and storage consent"
+      aria-hidden="true"
+      hidden
+    >
+      <div class="cookie-banner__content">
+        <p class="cookie-banner__text">
+          We use browser <strong>localStorage</strong> to save your transactions
+          and theme preference on this device. No data is sent to any server.
+          See our <a href="privacy.html">Privacy Policy</a> for details.
+        </p>
+        <div class="cookie-banner__actions">
+          <button
+            class="btn btn--ghost"
+            id="cookieRejectBtn"
+            type="button"
+          >
+            Reject
+          </button>
+          <button
+            class="btn btn--primary"
+            id="cookieAcceptBtn"
+            type="button"
+          >
+            Accept
+          </button>
+        </div>
+      </div>
+    </div>
 
     <script type="module" src="src/main.js"></script>
   </body>
