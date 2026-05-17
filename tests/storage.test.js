@@ -58,7 +58,7 @@ describe("saveTransactions", () => {
       },
     ];
 
-    const result = saveTransactions(transactions);
+    const result = saveTransactions(transactions, true);
     const savedRaw = localStorage.getItem(STORAGE_KEY);
     const saved = JSON.parse(savedRaw);
 
@@ -76,7 +76,7 @@ describe("saveTransactions", () => {
       throw error;
     });
 
-    const result = saveTransactions([]);
+    const result = saveTransactions([], true);
     expect(result).toEqual({ ok: false, error: "quota" });
   });
 
@@ -85,7 +85,7 @@ describe("saveTransactions", () => {
       throw new Error("unexpected");
     });
 
-    const result = saveTransactions([]);
+    const result = saveTransactions([], true);
     expect(result).toEqual({ ok: false, error: "unknown" });
   });
 });
@@ -158,7 +158,7 @@ describe("theme storage", () => {
   });
 
   it("saves and loads explicit theme", () => {
-    saveTheme("light");
+    saveTheme("light", true);
     expect(localStorage.getItem(THEME_KEY)).toBe("light");
     expect(loadTheme()).toBe("light");
   });

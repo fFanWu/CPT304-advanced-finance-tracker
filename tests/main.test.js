@@ -80,6 +80,7 @@ describe("main app bootstrap", () => {
     mocks.loadTransactions.mockReturnValue({ transactions: [], discarded: 0, error: null });
     mocks.saveTransactions.mockReturnValue({ ok: true });
     mocks.loadTheme.mockReturnValue("dark");
+    mocks.saveTheme.mockReturnValue({ ok: true });
   });
 
   it("initializes app and renders first screen", async () => {
