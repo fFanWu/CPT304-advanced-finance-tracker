@@ -152,9 +152,31 @@ describe("loadTransactions", () => {
   });
 });
 
+describe("saveTransactions consent guard", () => {
+  it("returns no-consent error when hasConsent is false", () => {
+    const result = saveTransactions([{ id: "1" }], false);
+    expect(result).toEqual({ ok: false, error: "no-consent" });
+  });
+});
+
+describe("loadTransactions versioned format", () => {
+  beforeEach(() => {
+    localStorage.clear();
+  });
+
+  it("loads versioned {transactions:[…]} format", () => {
+    const tx = { id: "tx_1", title: "Rent", amount: -800, category: "Housing", date: "2026-03-01" };
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({ version: STORAGE_VERSION, transactions: [tx] }));
+    const result = loadTransactions();
+    expect(result.transactions).toEqual([tx]);
+    expect(result.error).toBeNull();
+  });
+});
+
 describe("theme storage", () => {
   beforeEach(() => {
     localStorage.clear();
+    vi.restoreAllMocks();
   });
 
   it("saves and loads explicit theme", () => {
@@ -165,5 +187,25 @@ describe("theme storage", () => {
 
   it("defaults to dark when nothing is saved", () => {
     expect(loadTheme()).toBe("dark");
+  });
+
+  it("returns no-consent error when hasConsent is false", () => {
+    expect(saveTheme("light", false)).toEqual({ ok: false, error: "no-consent" });
+  });
+
+  it("returns quota error on QuotaExceededError", () => {
+    vi.spyOn(Storage.prototype, "setItem").mockImplementation(() => {
+      const err = new Error("quota");
+      err.name = "QuotaExceededError";
+      throw err;
+    });
+    expect(saveTheme("dark", true)).toEqual({ ok: false, error: "quota" });
+  });
+
+  it("returns unknown error on unexpected throw", () => {
+    vi.spyOn(Storage.prototype, "setItem").mockImplementation(() => {
+      throw new Error("disk failure");
+    });
+    expect(saveTheme("dark", true)).toEqual({ ok: false, error: "unknown" });
   });
 });

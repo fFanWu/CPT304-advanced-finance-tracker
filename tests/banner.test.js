@@ -28,6 +28,15 @@ describe("banner module", () => {
     vi.clearAllMocks();
   });
 
+  it("hideBanner is a no-op when banner is null", () => {
+    expect(() => hideBanner(null)).not.toThrow();
+  });
+
+  it("initBanner is a no-op when dom elements are missing", () => {
+    expect(() => initBanner({})).not.toThrow();
+    expect(() => initBanner()).not.toThrow();
+  });
+
   it("hideBanner hides and marks banner as hidden", () => {
     const { banner } = createDom();
     banner.hidden = false;

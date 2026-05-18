@@ -27,7 +27,7 @@ describe("validateTransactionInput", () => {
       title: "x".repeat(201),
     });
     expect(ok).toBe(false);
-    expect(errors.title).toContain("200");
+    expect(errors.title).toBe("error.titleTooLong");
   });
 
   it("fails when amount is zero", () => {
@@ -68,5 +68,11 @@ describe("validateTransactionInput", () => {
   it("accepts negative amounts", () => {
     const { ok } = validateTransactionInput({ ...validInput, amount: "-50" });
     expect(ok).toBe(true);
+  });
+
+  it("treats non-string title as empty", () => {
+    const { ok, errors } = validateTransactionInput({ ...validInput, title: null });
+    expect(ok).toBe(false);
+    expect(errors.title).toBe("error.titleRequired");
   });
 });
